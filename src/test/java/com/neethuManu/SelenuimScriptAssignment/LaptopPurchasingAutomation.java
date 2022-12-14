@@ -27,7 +27,7 @@ public class LaptopPurchasingAutomation {
 		// Initialize web driver instance
 		webDriver = new ChromeDriver();
 
-		//implicit wait
+		// implicit wait
 		webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 		// Launch a page
@@ -39,14 +39,14 @@ public class LaptopPurchasingAutomation {
 	@Test
 	public void verifyPhonePurchase() {
 
-		//registering the account
+		// registering the account
 		accountRegisteration();
-		
-		//Navigating to the login page
+
+		// Navigating to the login page
 		webDriver.navigate().to("https://naveenautomationlabs.com/opencart/index.php?route=account/login");
 		sleep();
 
-		//login in to the account
+		// login in to the account
 		WebElement emailInputFieldLogin = webDriver.findElement(By.cssSelector("input#input-email"));
 		WebElement passwordInputFieldLogin = webDriver.findElement(By.cssSelector("input#input-password"));
 		WebElement loginBtn = webDriver.findElement(By.cssSelector("input[type='submit']"));
@@ -171,7 +171,7 @@ public class LaptopPurchasingAutomation {
 
 	@AfterMethod
 	public void teardown() {
-		// webDriver.close();
+		webDriver.close();
 	}
 
 	public void selectElementByVisibleText(WebElement element, String text) {
@@ -188,7 +188,7 @@ public class LaptopPurchasingAutomation {
 
 	}
 
-	//Generating random emails
+	// Generating random emails
 	public String randomEmail() {
 		Random random = new Random();
 		int randomNum = random.nextInt(1000);
@@ -196,7 +196,7 @@ public class LaptopPurchasingAutomation {
 		return randomEmail;
 	}
 
-	//Account registering
+	// Account registering
 	public void accountRegisteration() {
 
 		WebElement inputFieldFirstName = webDriver
