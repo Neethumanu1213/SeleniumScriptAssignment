@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 public class LaptopPurchasingAutomation {
 
 	WebDriver webDriver;
-	String randomEmail = randomEmail();
+	String randomEmail;
 
 	@BeforeMethod
 	public void setUp() {
@@ -39,6 +39,7 @@ public class LaptopPurchasingAutomation {
 	@Test
 	public void verifyPhonePurchase() {
 
+		randomEmail = randomEmail();
 		// registering the account
 		accountRegisteration();
 
