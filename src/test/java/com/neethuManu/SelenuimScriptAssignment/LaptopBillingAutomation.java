@@ -7,27 +7,27 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.Select;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-public class LaptopPurchasingAutomation {
+public class LaptopBillingAutomation {
 
 	WebDriver webDriver;
 	String randomEmail;
-	SoftAssert sfAssert=new SoftAssert();
+	SoftAssert sfAssert = new SoftAssert();
 
 	@BeforeMethod
 	public void setUp() {
 
 		// Driver location to begin with Selenium
-		System.setProperty("webdriver.chrome.driver", "C:\\Chrome Driver\\chromedriver.exe");
+		System.setProperty("webdriver.edge.driver", "C:\\Edge Driver\\msedgedriver.exe");
 
 		// Initialize web driver instance
-		webDriver = new ChromeDriver();
+		webDriver = new EdgeDriver();
 
 		// implicit wait
 		webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -55,7 +55,7 @@ public class LaptopPurchasingAutomation {
 		WebElement loginBtn = webDriver.findElement(By.cssSelector("input[type='submit']"));
 		emailInputFieldLogin.sendKeys(randomEmail);
 		passwordInputFieldLogin.sendKeys("Learningsel@01");
-		loginBtn.click();
+		clickMethod(loginBtn);
 
 		// verifying the title page of my account
 		String titleOfThePage = webDriver.getTitle();
@@ -64,12 +64,12 @@ public class LaptopPurchasingAutomation {
 		// clicking on the laptop button
 		WebElement laptopAndNoteBookBtn = webDriver
 				.findElement(By.cssSelector("nav#menu>div:last-of-type>ul>li:nth-of-type(2)>a"));
-		laptopAndNoteBookBtn.click();
+		clickMethod(laptopAndNoteBookBtn);
 
 		// clicking on the show all menu button
 		WebElement showAllMenuBtn = webDriver
 				.findElement(By.cssSelector("nav#menu>div:last-of-type>ul>li:nth-of-type(2)>div>a"));
-		showAllMenuBtn.click();
+		clickMethod(showAllMenuBtn);
 
 		// verifying the title page
 		String titleOfLaptopPage = webDriver.getTitle();
@@ -78,11 +78,11 @@ public class LaptopPurchasingAutomation {
 		// selecting the HTC Touch HD button
 		WebElement hpLaptopBtn = webDriver.findElement(
 				By.cssSelector("div#content>div:nth-of-type(4)>div:first-of-type>div>div:last-of-type>div>h4>a"));
-		hpLaptopBtn.click();
+		clickMethod(hpLaptopBtn);
 
 		// adding item into the cart button#button-cart
 		WebElement addToCartBtn = webDriver.findElement(By.cssSelector("button#button-cart"));
-		addToCartBtn.click();
+		clickMethod(addToCartBtn);
 		sleep();
 
 		// item cart with price
@@ -90,11 +90,11 @@ public class LaptopPurchasingAutomation {
 		sleep();
 		String itemcartText = itemsBtn.getText();
 		sfAssert.assertEquals(itemcartText, "1 item(s) - $122.00");
-		itemsBtn.click();
+		clickMethod(itemsBtn);
 
 		// click checkout from the dialog box
 		WebElement checkOutBtn = webDriver.findElement(By.cssSelector("p.text-right>a:last-of-type>strong"));
-		checkOutBtn.click();
+		clickMethod(checkOutBtn);
 
 		// fill the details for payment
 		paymentDetails();
@@ -121,52 +121,52 @@ public class LaptopPurchasingAutomation {
 		selectElementByVisibleText(countryInputField, "Canada");
 		selectElementByVisibleText(regionInputField, "Nunavut");
 		sleep();
-		continueBtn.click();
+		clickMethod(continueBtn);
 
 		// delivery details
 		WebElement DeliverDetailsRadioBtn = webDriver
 				.findElement(By.cssSelector("div#collapse-shipping-address>div>form>div:first-of-type input "));
-		boolean isSelectedDeliveryDetails = DeliverDetailsRadioBtn.isSelected();
+		boolean isSelectedDeliveryDetails = isSelectedMethod(DeliverDetailsRadioBtn);
 		sfAssert.assertTrue(isSelectedDeliveryDetails, "Delivery details is not selected");
 		sleep();
 		WebElement continueBtnForDeliveryDetails = webDriver
 				.findElement(By.cssSelector("input#button-shipping-address  "));
-		continueBtnForDeliveryDetails.click();
+		clickMethod(continueBtnForDeliveryDetails);
 
 		// delivery method
 		WebElement DeliverMethodRadioBtn = webDriver.findElement(By.cssSelector("input[name='shipping_method']"));
-		boolean isSelectedDeliveryMethod = DeliverMethodRadioBtn.isSelected();
+		boolean isSelectedDeliveryMethod = isSelectedMethod(DeliverMethodRadioBtn);
 		sfAssert.assertTrue(isSelectedDeliveryMethod, "Delivery method is not selected");
 		sleep();
 		WebElement commentInputField = webDriver.findElement(By.cssSelector("textarea[name='comment'] "));
 		commentInputField.sendKeys("Hi");
 		WebElement continueBtnForDeliveryMethod = webDriver
 				.findElement(By.cssSelector("input#button-shipping-method  "));
-		continueBtnForDeliveryMethod.click();
+		clickMethod(continueBtnForDeliveryMethod);
 
 		// cash on delivery
 		WebElement cashOnDeliveryRadioBtn = webDriver
 				.findElement(By.cssSelector("div#collapse-payment-method>div>div:first-of-type input"));
-		boolean isSelectedCashOnDelivery = cashOnDeliveryRadioBtn.isSelected();
+		boolean isSelectedCashOnDelivery = isSelectedMethod(cashOnDeliveryRadioBtn);
 		sfAssert.assertTrue(isSelectedCashOnDelivery, "Cash On Delivery method is not selected");
 		sleep();
 		WebElement checkboxPrivacyPolicy = webDriver.findElement(By.cssSelector("input[name='agree']"));
-		checkboxPrivacyPolicy.click();
+		clickMethod(checkboxPrivacyPolicy);
 		WebElement continueBtnForCashOnDelivery = webDriver.findElement(By.cssSelector("input#button-payment-method"));
 		continueBtnForCashOnDelivery.click();
 
 		// confirm order
 		WebElement productName = webDriver.findElement(By.cssSelector("div.table-responsive>table>tbody>tr a"));
 		sleep();
-		String prodNameText = productName.getText();
+		String prodNameText = getTextMethod(productName);
 		sfAssert.assertEquals(prodNameText, "HP LP3065");
 		WebElement quantity = webDriver
 				.findElement(By.cssSelector("div.table-responsive>table>tbody>tr>td:nth-of-type(3)"));
 		sleep();
-		String quantityText = quantity.getText();
+		String quantityText = getTextMethod(quantity);
 		sfAssert.assertEquals(quantityText, "1");
 		WebElement confirmOrderBtn = webDriver.findElement(By.cssSelector("input#button-confirm"));
-		confirmOrderBtn.click();
+		clickMethod(confirmOrderBtn);
 		sleep();
 		String titleOfConfirmPage = webDriver.getTitle();
 		sfAssert.assertEquals(titleOfConfirmPage, "Your order has been placed!", "Item not confirmed");
@@ -196,7 +196,7 @@ public class LaptopPurchasingAutomation {
 	public String randomEmail() {
 		Random random = new Random();
 		int randomNum = random.nextInt(1000);
-		String randomEmail = "test" + randomNum + "@gmail.com"; 
+		String randomEmail = "test" + randomNum + "@gmail.com";
 		return randomEmail;
 	}
 
@@ -225,7 +225,7 @@ public class LaptopPurchasingAutomation {
 		inputFieldTelephone.sendKeys("1234567890");
 		inputFieldPassword.sendKeys("Learningsel@01");
 		inputFieldPasswordConfirm.sendKeys("Learningsel@01");
-		checkboxPrivacyPolicy.click();
+		clickMethod(checkboxPrivacyPolicy);
 		continueBtn.submit();
 		String titleOfPage = webDriver.getTitle();
 		sfAssert.assertEquals(titleOfPage, "Your Account Has Been Created!", "User is not registered");
@@ -240,4 +240,17 @@ public class LaptopPurchasingAutomation {
 		logOutBtn.click();
 
 	}
+
+	public void clickMethod(WebElement element) {
+		element.click();
+	}
+
+	public String getTextMethod(WebElement element) {
+		return element.getText();
+	}
+
+	public boolean isSelectedMethod(WebElement element) {
+		return element.isSelected();
+	}
+
 }
