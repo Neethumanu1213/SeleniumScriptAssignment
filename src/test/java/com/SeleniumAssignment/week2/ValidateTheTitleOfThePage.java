@@ -1,8 +1,9 @@
 package com.SeleniumAssignment.week2;
 
 import java.time.Duration;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,8 +16,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-public class ValidateTheTitleOfTabs {
-
+public class ValidateTheTitleOfThePage {
+	
 	WebDriver wd;
 
 	WebDriverWait wdwait;
@@ -45,7 +46,7 @@ public class ValidateTheTitleOfTabs {
 		action = new Actions(wd);
 
 	}
-
+	
 	@Test
 	public void validateTheTitle() {
 
@@ -54,69 +55,76 @@ public class ValidateTheTitleOfTabs {
 		sf.assertEquals(welcomeText.getText(), "Multiple window examples", "Text is not matched");
 
 		// parent window handle
-		String parentWinowHandle = wd.getWindowHandle();
+		Set<String> parentWinowHandle = wd.getWindowHandles();
+		
 
 		// clicking on first tab
 		WebElement newTab1 = wd.findElement(By.cssSelector("div.post-body.entry-content>a:first-of-type"));
 		elementClicking(newTab1);
 		Set<String> handlelist1 = wd.getWindowHandles();
-		handlelist1.remove(parentWinowHandle);
-		wd.switchTo().window(new ArrayList<>(handlelist1).get(0));
-		sf.assertEquals(wd.getTitle(), "Google", "Title is not match");
-		wd.switchTo().window(parentWinowHandle);
-		handlelist1.add(parentWinowHandle);
+		String firstTabHandle=findingHandle(handlelist1, parentWinowHandle);
+
 
 		// clicking on the second tab
 		WebElement newTab2 = wd.findElement(By.cssSelector("div.post-body.entry-content>a:nth-of-type(2)"));
 		elementClicking(newTab2);
 		Set<String> handlelist2 = wd.getWindowHandles();
-		findingHandle(handlelist2, handlelist1);
-		sf.assertEquals(wd.getTitle(), "Facebook - log in or sign up", "Title is not match");
-		wd.switchTo().window(parentWinowHandle);
+		String secondTabHandle=findingHandle(handlelist2, handlelist1);
+
 
 		// Clicking on the third tab
 		WebElement newTab3 = wd.findElement(By.cssSelector("div.post-body.entry-content>a:nth-of-type(3)"));
 		elementClicking(newTab3);
 		Set<String> handlelist3 = wd.getWindowHandles();
-		findingHandle(handlelist3, handlelist2);
+		String thirdTabHandle=findingHandle(handlelist3, handlelist2);
+		
+
+
+		// clicking fourth tab
+		WebElement newTab4 = wd.findElement(By.cssSelector("div.post-body.entry-content>a:last-of-type"));
+		elementClicking(newTab4);
+		//Set<String> handlelist4 = wd.getWindowHandles();
+		String forthTabHandle=wd.getWindowHandle();
+
+		sf.assertAll();
+
+
+		wd.switchTo().window(firstTabHandle);
+		sf.assertEquals(wd.getTitle(), "Google", "Title is not match");
+		wd.switchTo().window(secondTabHandle);
+		sf.assertEquals(wd.getTitle(), "Facebook - log in or sign up", "Title is not match");
+		wd.switchTo().window(thirdTabHandle);
 		sf.assertEquals(wd.getTitle(),
 				"Yahoo | Mail, Weather, Search, News, Finance, Sports, Shopping, Entertainment, Video",
 				"Title is not match");
-		wd.switchTo().window(parentWinowHandle);
+		wd.switchTo().window(forthTabHandle);
+		sf.assertEquals(wd.getTitle(), "Facebook - log in or sign up","Title is not match");
+		
 
-		// clicking fourth tab
-		WebElement newTab4 = wd.findElement(By.cssSelector("div.post-body.entry-content>a:nth-of-type(4)"));
-		elementClicking(newTab4);
-		Set<String> handlelist4 = wd.getWindowHandles();
-		findingHandle(handlelist4, handlelist3);
-		sf.assertEquals(wd.getTitle(), "Facebook - log in or sign up");
-		wd.switchTo().window(parentWinowHandle);
 
-		sf.assertAll();
 	}
-
+	
 	@AfterMethod
 	public void teardown() {
-		wd.quit();
+		//wd.quit();
 	}
+
 
 	public void elementClicking(WebElement element) {
-		action.moveToElement(element).click().perform();
+		//action.moveToElement(element).click().perform();
+		element.click();
 
 	}
-	
-	
-		
 
-	public void findingHandle(Set<String> set, Set<String> set1) {
+	public String findingHandle(Set<String> set, Set<String> set1) {
+		
+		set.removeAll(set1);
+		List<String> handle=set.stream().collect(Collectors.toList());
+		return handle.get(0);
 	
 		
 		
-		for (String string : set) {
-			if (!set1.contains(string)) {
-				wd.switchTo().window(string);
-			}
-		}
+		
 		
 
 	}
